@@ -1,0 +1,61 @@
+<header>
+  <h1>{{title}}</h1>
+  <div id="description" *ngIf="galleries">
+    {{description}}<br>
+    Tu będziemy wstawiać elementy oparte na AngularJS.<br>
+    <input id="szukaj" type="text" name="searchValue" [(ngModel)]="searchText" placeholder="Szukaj" > <br>
+    <a *ngIf="searchText as value; else elseBlock">Wyniki wyszukiwania dla: {{searchText}}</a>
+    <ng-template #elseBlock>Ilość elementów: {{galleries.length}}</ng-template> <br>
+
+    <label>Sortuj:</label>
+
+    <select [(ngModel)]="selectedOption" class="input-control" selected="value:1">
+      <option [ngValue]="1" selected>Chronologicznie</option>
+      <option [ngValue]="2">Alfabetycznie</option>
+      <option [ngValue]="3">Najnowsze</option>
+    </select>
+
+  </div>
+</header>
+
+<body>
+
+
+  <section class="container" *ngIf="selectedOption==3">
+    <nav class="galeria" *ngFor="let item of galleries | filter:searchText | orderBy:'dateCreated':'desc'">
+      <img [alt]=item.title [src]=item.thumbUrl> <p> <b>{{item.title}}</b> <br> Kiedy: {{item.dateCreated|polishDate|lowercase}} <br> {{item.description}}</p>
+    </nav>
+  </section>
+
+
+
+
+<section class="container" *ngIf="selectedOption==2;">
+  <nav class="galeria" *ngFor="let item of galleries | filter:searchText | alphabetical:'title'">
+    <img [alt]=item.title [src]=item.thumbUrl> <p> <b>{{item.title}}</b> <br> Kiedy: {{item.dateCreated|polishDate|lowercase}} <br> {{item.description}}</p>
+  </nav>
+</section>
+
+
+
+  <section class="container" *ngIf="selectedOption==1;">
+    <nav class="galeria" *ngFor="let item of galleries | filter:searchText | orderBy:'dateCreated':'asc'">
+      <img [alt]=item.title [src]=item.thumbUrl> <p> <b>{{item.title}}</b> <br> Kiedy: {{item.dateCreated|polishDate|lowercase}} <br> {{item.description}}</p>
+    </nav>
+  </section>
+
+
+</body>
+
+<footer>
+  <a *ngIf="selectedOption==2;">Galeria ułożona alfabetycznie.</a>
+  
+  <a *ngIf="selectedOption==1">
+    Galeria ułożona chronologicznie.
+  </a>
+
+  <a *ngIf="selectedOption==3">
+    Galeria ułożona od najnowszych.
+  </a>
+</footer>
+
